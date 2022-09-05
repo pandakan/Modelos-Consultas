@@ -1,0 +1,499 @@
+en uno a mucho en tarjte la cliente_id(fk) es foranea dice pk esta mal 
+
+// Esto es para que una vez que abris sesion, modificas el json que el nodemon no la cierre y la tengas que volver a abrir 
+"nodemonConfig": {
+    "ignore":"./src/data/*.json"
+  },
+
+//
+
+restricciones null: podes establecer que un campo tenga una restriccion, que si no pasa el nombre o el precio no lo vas a registrar (not null si o si tiene que guardar algo)
+que lo llene con algo, aunque sea 0 o un string vacio ' '.
+
+
+Crear tablas: 
+
+ create database "nombre";
+
+
+--------------------
+En las tablas pivot tenes que usar debajo de columnas para las claves foreign 
+
+
+*Vas a la pestañas de datos de la tabla y despues boton derecho agregar registro 
+
+*Primero borras los elementos y despues a la "Categoria" que hacia referencia a esos elementos. Borras primero lo que esta relacionado a esa categoria.
+---------------------------------------------
+El atributo "unsigned" (sin signo) permite sólo valores positivos.
+
+DECIMAL (NUMERIC): Almacena los números de coma flotante como cadenas o string.
+---------------------------------------------
+INSERT
+Para agregar datos 
+
+insert into users (nombre, edad)
+values ( "jona", 36);
+
+-------------------
+UPDATE sirve para modificar 
+
+update users                 // tabla 
+set name = 'kadorna'         // columna    
+where name = 'COSME';
+
+--------------------------------
+
+
+
+****************EJERCICIO PLAY:**************
+Insertar en la tabla genres un nuevo género 
+con los siguientes datos:
+○ name: Investigación
+○ ranking: 13
+○ active: 1
+
+insert into genres (name, ranking, active)
+values ('investigacion', 13, 1);
+
+----
+
+update genres 
+set name = 'investigacion cientifica'
+where name = 'investigacion' 
+
+-------------
+
+Eliminar el registro cuyo name es: “Investigación Científica”.
+ Recordemos verificar cuál es el id de dicho registro.
+
+DELETE FROM genre WHERE id = 13;
+
+--------------------------------------
+select
+4. Mostrar todos los registros de la tabla “movies”.
+select *
+from movies
+
+
+5-Mostrar el nombre, apellido y rating de todos los actores.
+select first_name, last_name, rating
+from actors
+
+6- Mostrar el título de todas las series
+select title 
+from series
+
+-----------------
+Utilizando el Where y Order by , ejecutemos las siguientes consultas (ten en cuenta el uso
+de los operadores lógicos y relacionales).
+
+1. Mostrar el nombre y apellido de los actores cuyo rating sea mayor a 7.5.
+
+select first_name, last_name
+from actors
+where rating >7.5
+
+2. Mostrar el título de las películas, el rating y los premios de las películas con un rating
+mayor a 7.5 y con más de dos premios.
+
+select title, rating
+from movies
+where rating >7.5 and 
+awards > 2
+
+3- Mostrar el título de las películas y el rating 
+ordenadas por rating en forma ascendente.
+
+select title, rating
+from movies
+order by rating 
+
+----------------------
+
+Vamos muy bien, no nos desanimemos ni por un minuto. Ahora, para la realización de las
+consultas debemos valernos del Limit y Offset .
+
+1. Mostrar los títulos de las primeras tres películas en la base de datos.
+
+select title  
+from movies 
+limit 3;
+
+2. Mostrar el top 5 de las películas con mayor rating.
+
+select title, rating  
+from movies 
+order by rating desc
+limit 5;
+
+3. Mostrar las top 5 a 10 de las películas con mayor rating.
+select title, rating  
+from movies 
+limit 5
+offset 5;
+
+4- Listar los primeros 10 actores (sería la página 1).
+a. Luego, usar offset para traer la página 3.
+
+---------------------------------------------
+
+Micro desafío - Paso 4:
+Ya casi culminamos todos los desafíos. Utilizando el Between y Like , hagamos las
+siguientes consultas:
+
+1. Mostrar el título y rating de todas las películas cuyo título sea Harry Potter.
+
+select title, rating
+from movies
+where title like '%Harry Potter%'
+
+
+2. Mostrar a todos los actores cuyos nombres empiecen con Sam.
+
+select first_name
+from actors 
+where first_name like 'Sam%'
+
+
+3. Mostrar el título de las películas que salieron entre el 2004 y 2008.
+
+select title, release_date  
+from movies
+where release_date > 2004-01-01 00:00:00 
+and release_date < 2008-12-31 00:00:00;
+
+select title, release_date  
+from movies
+where release_date  between '2004' and '2008';
+
+--------------------------
+JHONA CLASE 
+Funcion:
+
+select 
+concat('Canción: ', nombre, ' - ', 'Compositor: ', compositor)
+as CANCIONES
+from canciones
+
+----------
+select primer_nombre, coalesce(empresa, direccion) as Direccion from clientes
+
+-----------
+select id_cliente, 
+extract(day from fecha_factura) 
+from facturas
+
+----------
+
+select id_cliente, date_format(fecha_factura, '%W %e %M %Y') as Fecha  
+from facturas
+---------------------
+
+Inner Join 
+
+select clientes.id, clientes.primer_nombre, facturas.id, facturas.total 
+from clientes , facturas
+where facturas.id_cliente = clientes.id 
+order by clientes.id;
+
+select facturas.id 
+from facturas 
+where id_cliente = 2;
+
+select clientes.id, clientes.primer_nombre, facturas.id, facturas.total 
+from clientes 
+inner join facturas
+on facturas.id_cliente = clientes.id 
+order by clientes.id;
+
+------------------------------------------------------
+select clientes.id, clientes.primer_nombre, facturas.id, facturas.total 
+from clientes , facturas
+where facturas.id_cliente = clientes.id 
+order by clientes.id;
+
+select facturas.id 
+from facturas 
+where id_cliente = 2;
+
+select clientes.id, clientes.primer_nombre, facturas.id, facturas.total 
+from clientes 
+left join facturas
+on facturas.id_cliente = clientes.id 
+order by clientes.id;
+
+delete from facturas where id_cliente = 1;
+
+select id, primer_nombre from clientes where id = 1;
+------------------------------------------------------
+
+select canciones.nombre, generos.nombre as genero, albumes.titulo 
+from canciones 
+inner join generos
+on generos.id = canciones.id_genero 
+inner join albumes
+on canciones.id_album = albumes.id
+order by albumes.titulo
+----------------------------------------------------------------
+
+Distinct
+
+select distinct id_cliente as Factura 
+from facturas order by id_cliente;
+-----------------------------------------------------
+
+select id_cliente, AVG(total) as 'Promedio facturas'
+from facturas
+group by id_cliente
+
+-----------------------------------------------------
+select count(id_cliente) as 'Clientes', pais_de_facturacion as 'País' 
+from facturas 
+group by pais_de_facturacion 
+
+
+------------------------------------------------------
+
+Acordate cuando vas a borrar, siempre tenes que empezar por las tablas secundarias y despues vas al principal 
+
+
+
+
+----------------------------------------------------------------
+
+Trabajo playground II
+
+Utilizando la base de datos de películas queremos conocer,
+ por un lado, los títulos y el nombre del género de todas las series de la base de datos.
+ Por otro, necesitamos listar los títulos de los episodios junto con el nombre y apellido de los actores que trabajan en cada
+uno de ellos.
+
+1° inne joint 
+from series ( title) genre_id
+la otra genre name 
+
+
+/*Micro desafío 1*/
+
+select  movies.id, movies.title, genres.name
+from movies
+left join genres on movies.genre_id = genres.id;
+
+
+select episodes.title, actors.first_name , actors.last_name 
+from episodes 
+inner join actor_episode on episode_id = episodes.id
+inner join actors on actor_id = actors.id;
+
+-----------------------------------------------------
+
+Para nuestro próximo desafío necesitamos obtener a todos los actores o actrices (mostrar
+nombre y apellido) que han trabajado en cualquier película de la saga de la Guerra de las
+galaxias, pero ¡cuidado!: debemos asegurarnos de que solo se muestre una sola vez cada
+actor/actriz.
+
+
+Distinct 
+
+select distinct actors.first_name, actor.last_name 
+from actor 
+inner join actor_movie on actors.id = actor_movie-actor_id
+
+/*Micro desafío 2*/
+
+select distinct actors.first_name, actors.last_name 
+from actors 
+inner join actor_movie on actors.id = actor_id
+inner join movies on movie_id = movies.id
+where title like('La guerra%')
+
+--------------------------------------------------------
+
+Micro 3 
+
+select title, coalesce (name, "no tiene género") 
+from movies 
+left join genres on genre_id = genres.id;
+
+
+
+micro 4?
+select title as "Titulo", datediff(end_date ,release_date) as "Duracion"
+from series
+
+
+
+micro 5 
+select series.title as Titulo, count(seasons.serie_id) as "Cantidad de temporadas"
+from series 
+inner join seasons 
+on series.id = seasons.serie_id 
+group by series.title
+
+/* Micro desafio 5 */
+
+select actors.first_name , actors.last_name 
+from actors 
+where char_length(actors.first_name) > 6 
+order by actors.first_name 
+
+select count(*) from episodes;
+
+select series.title, count(*) as "Cantidad"
+from series
+inner join seasons on seasons.serie_id = series.id
+group by series.id
+
+select series.title as Titulo, count(seasons.serie_id) as "Cantidad de temporadas"
+from series 
+inner join seasons 
+on series.id = seasons.serie_id 
+group by series.title
+
+select genres.name, count(*) as "Cantidad"
+from genres 
+inner join movies on genres.id = movies.genre_id 
+group by genres.id 
+having count(*) >= 3
+
+
+
+------------------
+INSERT INTO GENEROS (ID, NOMBRE)
+VALUES (26, 'CUMBIA');
+
+
+select primer_nombre, pais  
+from musimundos.clientes
+where pais = "USA";
+
+select nombre, milisegundos  from musimundos.canciones 
+where milisegundos >= 200000 
+and milisegundos  <= 300000;
+
+
+select primer_nombre, pais from musimundos.clientes
+where pais = "Spain" 
+or pais = "Argentina";
+
+select nombre from musimundos.generos
+order by nombre;
+
+
+select primer_nombre, pais, ciudad from musimundos.clientes
+order by pais desc, ciudad; 
+
+
+select nombre, id_album,  milisegundos from musimundos.canciones 
+order by milisegundos desc 
+limit 3;
+
+select nombre, compositor from musimundos.canciones 
+order by nombre  
+limit 5
+offset 5;
+
+---
+Between like
+
+select nombre  		
+from musimundos.canciones  	
+where compositor like 'a%';
+
+Inject The Venom 
+
+---
+select nombre
+from musimundos.generos 
+where nombre like ("%ro%");
+
+----------------
+
+select nombre
+from musimundos.canciones
+where  id between 10 and 20;
+
+--------------------
+JOIN
+
+select canciones.nombre
+from musimundos.canciones
+inner join musimundos.generos on id_genero = generos.id
+
+-------------------
+
+select canciones.id_tipo_de_medio, canciones.nombre, tipos_de_medio.id
+from musimundos.canciones 
+inner join musimundos.tipos_de_medio  on id_tipo_de_medio = tipos_de_medio.id
+where tipos_de_medio.id = 1;
+
+-----------
+select albumes.titulo, artistas.nombre
+from musimundos.albumes 
+inner join musimundos.artistas  on id_artista = artistas.id
+where artistas.id = 58;
+
+------------------
+Distinc
+
+select distinct titulo
+from musimundos.empleados;
+
+----------------
+Group by 
+select generos.nombre, count(*)
+from musimundos.generos  
+inner join musimundos.canciones  on generos.id = canciones.id_genero 
+group by generos.nombre;
+
+-----------------------
+Count 
+select count(*)
+from musimundos.clientes 
+where clientes.pais = 'Brazil' 
+
+-----
+sum 
+select sum(total)
+from facturas;
+
+------------
+HAVING 
+
+select sum(total), pais_de_facturacion
+from musimundos.facturas 
+group by pais_de_facturacion 
+having sum(total) > 100;
+
+
+select count(id), ciudad
+from musimundos.clientes 
+group by ciudad
+having count(id) >= 2;
+---------------------------
+
+ /*Hacé una consulta a la base de datos que traiga el nombre del género y la cantidad de canciones que posee.*/
+ 
+ select count(canciones.id), generos.nombre
+ from musimundos.canciones 
+ inner join musimundos.generos on id_genero = generos.id
+ group by id_genero;
+
+-------------
+ /*banda AC/DC 1 y consulta a la base de datos el álbum 'Let There Be Rock' id 4 , 
+lista sus canciones , su duración y saca un promedio de duracion de las mismas. */ 
+ 
+ 
+select id_album, avg(canciones.milisegundos)
+from musimundos.canciones
+where canciones.id_album = 4;
+
+-------------------------
+
+/*Hacé una consulta a la base de datos que nos traiga el total de la factura más cara que tenga el cliente
+número 48.*/
+
+select id_cliente, max(total)
+from musimundos.facturas 
+where id_cliente = 48;
+
